@@ -6,7 +6,6 @@ import argparse
 
 from os.path import join,exists
 from openai import OpenAI
-from glob import glob
 from tqdm import tqdm
 
 API_KEY = "" # fill in your api key here 
