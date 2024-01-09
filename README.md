@@ -9,9 +9,9 @@
 Evaluate LLM's outputs on decomposed questions. Using GPT-4-0314 by default in this research.
 ```bash
 python evaluation.py \
-  --input model/output.json
-  --output_dir evaluation/
-  --eval_model gpt-4-0314
+  --input model/output.json \
+  --output_dir evaluation/ \
+  --eval_model gpt-4-0314 \
   --temperature 0
 ```
 
