@@ -5,7 +5,6 @@ import tiktoken
 import argparse
 
 from os.path import join,exists
-from fire import Fire
 from openai import OpenAI
 from glob import glob
 from tqdm import tqdm
