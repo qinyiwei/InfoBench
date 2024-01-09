@@ -8,8 +8,7 @@ from os.path import join,exists
 from openai import OpenAI
 from tqdm import tqdm
 
-API_KEY = "" # fill in your api key here 
-client = OpenAI(api_key=API_KEY)
+encoder = tiktoken.get_encoding("cl100k_base")
 
 SYS_MSG ="Based on the provided Input (if any) and Generated Text, answer the ensuing Ouestions with either a YES or NOchoice. Your selection should be based on your judgment as well as the following rules:\n\n- YES: Select 'YES' if the generated text entirely fulfills the condition specified in the question. Howevernote that even minor inaccuracies exclude the text from receiving a 'YES' rating. As an illustration. consider aquestion that asks. \"Does each sentence in the generated text use a second person?” If even one sentence doesnot use the second person, the answer should NOT be 'YES'. To qualify for a 'YES' rating, the generated textmust be entirely accurate and relevant to the question\n\n- NO: Opt for 'NO' if the generated text fails to meet the question's requirements or provides no informationthat could be utilized to answer the question. For instance, if the question asks. \"Is the second sentence irthe generated text a compound sentence?\" and the generated text only has one sentence. it offers no relevantinformation to answer the question. Consequently, the answer should be 'NO'.'''"
 
@@ -48,7 +47,7 @@ def bool_ratio(fpath):
     print(f"Percentage of True: {count['true']/sum(count.values())}")
     return
 
-def run_evaluation(in_path, o_dir, eval_model="gpt-4-0314", temperature=0):
+def run_evaluation(client, in_path, o_dir, eval_model="gpt-4-0314", temperature=0):
     """
     Main function to run decomposed questisons evaluation on models' outputs
         in_path: str, path to the model output file
@@ -166,21 +165,29 @@ def run_evaluation(in_path, o_dir, eval_model="gpt-4-0314", temperature=0):
     
     return _opath
 
-def main_run(results_file, output_dir, eval_model="gpt-4-0314", temperature=0):
+def main_run(args):
+    client = OpenAI(api_key=args.api_key)
+    results_file = args.input
+    output_dir = args.output_dir
+    eval_model = args.model
+    temperature = args.temperature
+    
     if not exists(results_file):
         print(f"results_dir {results_file} not exists")
         return
     
     # run evaluation for each model
-    run_evaluation(results_file, output_dir, eval_model, temperature) 
+    run_evaluation(client, results_file, output_dir, eval_model, temperature) 
     return    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--api_key", type=str, default=None)
+    parser.add_argument("--model", type=str, default="gpt-4-0314", help="model name to be used for evaluation")
+    
     parser.add_argument("--input", type=str, required=True, help="path to the results file")
     parser.add_argument("--output_dir", type=str, required=True, help="path to the output folder")
-    parser.add_argument("--eval_model", type=str, default="gpt-4-0314", help="model name to be used for evaluation")
+    
     parser.add_argument("--temperature", type=float, default=0, help="temperature to be used for evaluation")
     args = parser.parse_args()
-    
-    main_run(args.input, args.output_dir, args.eval_model, args.temperature)
+    main_run(args)
