@@ -2,7 +2,7 @@
 
 - **Paper:** [InFoBench: Evaluating Instruction Following Ability in Large Language Models](https://arxiv.org/pdf/2401.03601.pdf)
 - **Dataset:** [InFoBench Dataset](https://huggingface.co/datasets/kqsong/InFoBench)
-- **Annotation:** [InFoBench Annotation](https://drive.google.com/drive/folders/1Bj7u196p2fxBP03dQgd5lvddFoeSdPFO?usp=drive_link)
+- **Generation and Annotation:** [InFoBench Generation and Annotation](https://drive.google.com/drive/folders/1Bj7u196p2fxBP03dQgd5lvddFoeSdPFO?usp=drive_link)
     
 ## Citation
 ```
